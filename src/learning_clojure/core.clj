@@ -42,12 +42,61 @@
   [coll]
   (sort (take (* 2 (count coll))(cycle coll))))
 
-;;Write a function which returns the first X fibonacci numbers.
 
-(fn Fibonacci-seqs
-  [n]
-  (letfn [fibonacci [a b]
-          (lazy-seq 
-           (cons (+ a b) (fibonacci b (+ a b))))]
-    (take n (cons 1 (fibonacci 0 1)))))
-;; Error : - Don't know how to create ISeq from: clojure.lang.Symbol
+;;Clojure has many sequence types, which act in subtly different ways. The core functions typically convert them into a uniform "sequence" type and work with them that way, but it can be important to understand the behavioral and performance differences so that you know which kind is appropriate for your application.
+
+;;Write a function which takes a collection and returns one of :map, :set, :list, or :vector - describing the type of collection it was given.
+;;You won't be allowed to inspect their class or use the built-in predicates like list? - the point is to poke at them and understand their behavior.
+
+(defn Black-box-testing [coll]
+  (cond
+    (= (get (conj coll [:t "t"]) :t) "t") :map
+    (= (get (conj coll :t) :t) :t) :set
+    (= (first (conj coll :b)) :b) :list
+    (= (last (conj coll :b)) :b) :vector))
+
+;;Transform a sequence into a sequence of pairs containing the original elements along with their index.
+
+(defn indexing-sequence
+  [coll]
+  (map-indexed
+   (fn [v i] (vector i v))
+   coll))
+
+;;reverse a number
+
+(defn reverse-number
+  [number reversed]
+   (if (= number 0)
+     reversed
+     (reverse-number(quot number 10) 
+                    (+ (rem number 10) (* reversed 10)))))
+
+;;Write a function which, given a key and map, returns true iff the map contains an entry with that key and its value is nil.
+
+(defn nil-key
+  [k m]
+  (if (contains? m k)
+    (= (k m) nil)
+    false))
+
+;;When retrieving values from a map, you can specify default values in case the key is not found:
+
+;;(= 2 (:foo {:bar 0, :baz 1} 2))
+
+;;However, what if you want the map itself to contain the default values? Write a function which takes a default value and a sequence of keys and constructs a map.
+
+(fn map-defaults
+  [n seq]
+  (apply hash-map
+         (interleave seq
+                     (repeat n))))
+
+;;Given two integers, write a function which returns the greatest common divisor.
+
+(defn greatest-common-divisor
+  [a b]
+  (if ( zero? b)
+    a
+    (recur b (mod a b))))
+

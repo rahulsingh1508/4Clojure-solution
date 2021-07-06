@@ -35,3 +35,46 @@
            '([1 2] [1 2] [3 4] [3 4])))
   (t/is (= (lct/Duplicate-a-sequence [[1 2] [3 4]])
            '([1 2] [1 2] [3 4] [3 4]))))
+
+(t/deftest Black-box-testing
+  (t/is (= (lct/Black-box-testing {:a 1, :b 2})
+           :map))
+  (t/is (= (lct/Black-box-testing (range (rand-int 20)))
+           :list))
+  (t/is (= (lct/Black-box-testing [1 2 3 4 5 6])
+           :vector))
+  (t/is (= (lct/Black-box-testing #{10 (rand-int 5)})
+           :set))
+  (t/is (= (lct/Black-box-testing [{} #{} [] '()])
+           [:map :set :vector :list])))
+
+(t/deftest reverse-number
+  (t/is (= (lct/reverse-number 123456)
+           654321))
+  (t/is (= (lct/reverse-number 3215)
+           5123)))
+
+(t/deftest nil-key
+  (t/is (= (lct/nil-key :a {:a nil :b 2})
+           true))
+  (t/is (= (lct/nil-key :b {:a nil :b 2})
+           false))
+  (t/is (= (lct/nil-key :c {:a nil :b 2})
+           false)))
+
+(t/deftest map-defaults
+  (t/is (= (lct/map-defaults 0 [:a :b :c])
+           {:a 0 :b 0 :c 0}))
+  (t/is (= (lct/map-defaults "x" [1 2 3])
+           {1 "x" 2 "x" 3 "x"}))
+  (t/is (= (lct/map-defaults [:a :b] [:foo :bar])
+           {:foo [:a :b] :bar [:a :b]})))
+(t/deftest greatest-common-divisor
+  (t/is (= (lct/greatest-common-divisor 2 4)
+            2))
+  (t/is (= (lct/greatest-common-divisor 10 5)
+           5))
+  (t/is (= (lct/greatest-common-divisor 5 7)
+           1))
+  (t/is (= (lct/greatest-common-divisor 1023 858)
+           33)))
