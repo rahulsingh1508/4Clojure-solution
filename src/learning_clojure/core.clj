@@ -84,7 +84,7 @@
 
 ;;However, what if you want the map itself to contain the default values? Write a function which takes a default value and a sequence of keys and constructs a map.
 
-(fn map-defaults
+(defn map-defaults
   [n seq]
   (apply hash-map
          (interleave seq
@@ -97,3 +97,128 @@
   (if ( zero? b)
     a
     (recur b (mod a b))))
+
+;;Problem 80
+;;A number is "perfect" if the sum of its divisors equal
+;;the number itself. 6 is a perfect number because 1+2+3=6. Write a
+;;function which returns true for perfect numbers and false otherwise.
+
+(defn perfect-number
+  [n]
+  (= n (reduce +
+               (filter
+                #(zero? (mod n %))
+                (range 1 n)))))
+
+;;Problem 29
+;;Write a function which takes a string and returns a new string containing only the capital letters.
+
+(defn capital-letters
+  [s]
+  (apply str (re-seq #"[A-Z]+" s)))
+
+;;Problem 30
+;;Write a function which removes consecutive duplicates from a sequence.
+
+(defn remove-duplicates
+  [s]
+  (map first (partition-by identity s)))
+
+
+
+(defn last-element
+  [coll]
+  (drop (dec (count coll)) coll))
+
+
+;;Problem 26
+;;Write a function which returns the first X fibonacci numbers.
+
+(defn fibonacci-number
+  [n]
+  (take n (map first (iterate (fn [[a b]]
+                                 [b (+ a b)])[1 1]) )))
+
+;;Problem 27
+;;Write a function which returns true if the given sequence is a palindrome. Hint: "racecar" does not equal '(\r \a \c \e \c \a \r)
+
+(defn palindrome-check
+  [coll]
+   (#(= (seq coll) (reverse (seq coll)))))
+
+
+
+;;Problem 32
+;;Write a function which duplicates each element of a sequence.
+
+(defn duplicate-seq
+  [coll]
+  ((take (* (count coll) 2)(cycle coll))))
+
+
+;;Problem 33
+;;Write a function which replicates each element of a sequence a variable number of times.
+
+(defn replicate-seq
+  [seq n]
+  (mapcat #(repeat n %) seq))
+
+
+;;Range-implemntation
+
+(defn implement-range
+  [s l]
+  (take (- l s) (iterate inc s)))
+
+
+;;
+
+
+(defn square-number
+  [n]
+  (* n n))
+
+(defn square-numbers
+  [coll]
+  (map square-number coll))
+
+
+;;Problem 42
+;;Write a function which calculates factorials.
+
+(defn factorial-of-number
+  [n]
+  (if (<= n 1) 
+    n
+    (* n (factorial-of-number (dec n)))))
+
+
+;;Problem 43
+;;Write a function which reverses the interleave process into x number of subsequences
+
+(defn reverse-interleave
+  [coll n]
+  (for [i (range n)]
+    (take-nth n (drop i coll))))
+
+
+;;Problem 44
+;;Write a function which can rotate a sequence in either direction
+
+(defn rotate-seq
+  [n coll]
+  (take (count coll) (drop (mod n (count coll)) (cycle coll))))
+
+
+;;Problem 46
+;;Write a higher-order function which flips the order of the arguments of an input function.
+
+(defn flips-orders
+  [f]
+  (fn [& args]
+    (apply f (reverse args))))
+
+
+
+
+
